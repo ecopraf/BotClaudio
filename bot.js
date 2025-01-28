@@ -1,13 +1,18 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 
 const client = new Client({
-    authStrategy: new LocalAuth()
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
 });
 
 client.on('qr', (qr) => {
     const qrcode = require('qrcode-terminal');
     console.log('Scansiona questo QR code con WhatsApp per connettere il bot:');
     qrcode.generate(qr, { small: true }); // Questo comando mostra il QR code nel terminale
+    console.log('\nStringa alfanumerica per generare il QR code manualmente:');
+    console.log(qr); // Mostra la stringa alfanumerica nel terminale
 });
 
 client.on('ready', () => {
