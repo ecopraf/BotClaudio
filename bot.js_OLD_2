@@ -1,0 +1,32 @@
+const { Client, LocalAuth } = require('whatsapp-web.js');
+
+const client = new Client({
+    authStrategy: new LocalAuth()
+});
+
+client.on('qr', (qr) => {
+    console.log('Scansiona questo QR code con WhatsApp:', qr);
+});
+
+client.on('ready', () => {
+    console.log('Il bot è pronto!');
+});
+
+client.on('message', async (message) => {
+    const triggerNumber = '393382776881@c.us'; // Numero specifico con formato WhatsApp
+    const sender = message.author || message.from; // Per gestire messaggi da gruppi
+
+    // Rispondi al numero specifico con messaggi vocali
+    if (sender === triggerNumber && message.type === 'ptt') { // "ptt" è il tipo di messaggio vocale
+        const risposte = ["accirete", "strunz", "minkione"];
+        const risposta = risposte[Math.floor(Math.random() * risposte.length)];
+        message.reply(risposta);
+    }
+
+    // Rispondi se il messaggio contiene "claudio"
+    if (message.body && message.body.toLowerCase().includes('claudio')) {
+        message.reply("il Minkione");
+    }
+});
+
+client.initialize();
